@@ -1,4 +1,4 @@
-function pct(a, b) {
+﻿function pct(a, b) {
   if (!b) return 0;
   return Math.round((a / b) * 100);
 }
@@ -36,7 +36,7 @@ function devicePie(devices) {
   return devices.map(function (d) {
     var p = pct(d.c, total);
     var color = d.device === 'mobile' ? '#f59e0b' : '#3b82f6';
-    var icon = d.device === 'mobile' ? '📱' : '🖥️';
+    var icon = d.device === 'mobile' ? 'ðŸ“±' : 'ðŸ–¥ï¸';
     return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
       + '<span style="font-size:1.1rem">' + icon + '</span>'
       + '<div style="flex:1">'
@@ -62,11 +62,11 @@ function section(title, content) {
 }
 
 function flag(cc) {
-  if (!cc || cc.length !== 2) return '🌐';
+  if (!cc || cc.length !== 2) return 'ðŸŒ';
   try {
-    const pts = [...cc.toUpperCase()].map(c => 0x1F1E0 + c.charCodeAt(0) - 65);
+    const pts = [...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65);
     return String.fromCodePoint(...pts);
-  } catch { return '🌐'; }
+  } catch { return 'ðŸŒ'; }
 }
 
 export async function onRequest({ request, env }) {
@@ -115,7 +115,7 @@ export async function onRequest({ request, env }) {
   );
 
   const linkTbody = rows(links, maxLink,
-    r => '🔗 ' + r.mode,
+    r => 'ðŸ”— ' + r.mode,
     r => r.c,
     'linear-gradient(to right,#3b82f6,#60a5fa)'
   );
@@ -125,7 +125,7 @@ export async function onRequest({ request, env }) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SC Links — Analytics</title>
+<title>SC Links â€” Analytics</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:#0a0d14;color:#e2e8f0;min-height:100vh;padding:28px 20px}
@@ -136,26 +136,26 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#0a0d14;color:#e2
 <div style="max-width:960px;margin:0 auto">
 
   <div style="margin-bottom:28px">
-    <h1 style="font-size:1.6rem;font-weight:800;color:#f8fafc;letter-spacing:-0.02em">🔗 Star Citizen Links Analytics</h1>
+    <h1 style="font-size:1.6rem;font-weight:800;color:#f8fafc;letter-spacing:-0.02em">ðŸ”— Star Citizen Links Analytics</h1>
     <p style="font-size:0.78rem;color:#475569;margin-top:4px">Atualizado: ${new Date().toUTCString()}</p>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px">
     ${card('Hoje', vToday)}
-    ${card('Esta Semana', vWeek, 'últimos 7 dias')}
-    ${card('Este Mês', vMonth, 'últimos 30 dias')}
-    ${card('Total', vTotal, 'desde o início')}
+    ${card('Esta Semana', vWeek, 'Ãºltimos 7 dias')}
+    ${card('Este MÃªs', vMonth, 'Ãºltimos 30 dias')}
+    ${card('Total', vTotal, 'desde o inÃ­cio')}
   </div>
 
-  ${section('Visitas por dia — últimos 30 dias',
+  ${section('Visitas por dia â€” Ãºltimos 30 dias',
     '<div style="display:flex;align-items:flex-end;gap:3px;height:120px;overflow-x:auto;padding-bottom:2px">'
     + dailyChart(daily) + '</div>'
   )}
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
-    ${section('Top Países',
+    ${section('Top PaÃ­ses',
       '<table style="width:100%;border-collapse:collapse">'
-      + '<thead><tr><th style="' + thStyle + '">País</th><th style="' + thStyle + ';text-align:right">Visitas</th><th style="' + thStyle + '">Bar</th></tr></thead>'
+      + '<thead><tr><th style="' + thStyle + '">PaÃ­s</th><th style="' + thStyle + ';text-align:right">Visitas</th><th style="' + thStyle + '">Bar</th></tr></thead>'
       + '<tbody>' + countryTbody + '</tbody></table>'
     )}
     ${section('Links mais clicados',
@@ -174,3 +174,4 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#0a0d14;color:#e2
 
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
+
