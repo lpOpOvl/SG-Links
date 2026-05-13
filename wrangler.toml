@@ -1,0 +1,8 @@
+name = "starcitizen-links"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sglinks-analytics"
+database_id = "493f28f0-6140-49fd-8eeb-22bc2f781059"
