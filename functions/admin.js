@@ -103,17 +103,17 @@ export async function onRequest({ request, env }) {
 <div style="max-width:960px;margin:0 auto">
   <div style="margin-bottom:28px">
     <h1 style="font-size:1.6rem;font-weight:800;color:#f8fafc;letter-spacing:-0.02em">Star Citizen Links &mdash; Analytics</h1>
-    <p style="font-size:0.78rem;color:#475569;margin-top:4px">Updated: ${new Date().toUTCString()}</p>
+    <p style="font-size:0.78rem;color:#475569;margin-top:4px">Atualizado: ${new Date().toUTCString()}</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px">
-    ${statCard('Today', todayRow?.c ?? 0)}
-    ${statCard('This Week', weekRow?.c ?? 0, 'last 7 days')}
-    ${statCard('This Month', monthRow?.c ?? 0, 'last 30 days')}
-    ${statCard('Total', totalRow?.c ?? 0, 'all time')}
+    ${statCard('Hoje', todayRow?.c ?? 0)}
+    ${statCard('Esta Semana', weekRow?.c ?? 0, '&#250;ltimos 7 dias')}
+    ${statCard('Este M&#234;s', monthRow?.c ?? 0, '&#250;ltimos 30 dias')}
+    ${statCard('Total', totalRow?.c ?? 0, 'desde o in&#237;cio')}
   </div>
-  ${section('Daily Visits - Last 30 Days', '<div style="display:flex;align-items:flex-end;gap:3px;height:120px;overflow-x:auto;padding-bottom:2px">' + dailyChart(daily) + '</div>')}
+  ${section('Visitas por Dia &#8212; &#218;ltimos 30 Dias', '<div style="display:flex;align-items:flex-end;gap:3px;height:120px;overflow-x:auto;padding-bottom:2px">' + dailyChart(daily) + '</div>')}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
-    ${section('Top Countries',
+    ${section('Top Pa&#237;ses',
       '<table style="width:100%;border-collapse:collapse"><thead><tr>' +
       '<th style="' + thStyle + '">Country</th>' +
       '<th style="' + thStyle + ';text-align:right">Visits</th>' +
@@ -121,7 +121,7 @@ export async function onRequest({ request, env }) {
       tableRows(countries, maxC, r => flagImg(r.country) + r.country, r => r.c, 'linear-gradient(to right,#10b981,#34d399)') +
       '</tbody></table>'
     )}
-    ${section('Most Clicked Links',
+    ${section('Links mais clicados',
       '<table style="width:100%;border-collapse:collapse"><thead><tr>' +
       '<th style="' + thStyle + '">Link</th>' +
       '<th style="' + thStyle + ';text-align:right">Clicks</th>' +
@@ -130,7 +130,7 @@ export async function onRequest({ request, env }) {
       '</tbody></table>'
     )}
   </div>
-  ${section('Devices', deviceBars(devices))}
+  ${section('Dispositivos', deviceBars(devices))}
   <p style="font-size:0.7rem;color:#334155;text-align:right;margin-top:16px">Star Citizen Links Analytics &mdash; Cloudflare D1</p>
 </div>
 </body>
