@@ -5,7 +5,7 @@ function barInline(ratio, color) {
 }
 
 function tableRows(arr, maxVal, keyFn, valFn, color) {
-  if (!arr || !arr.length) return '<tr><td colspan="3" style="color:#475569;text-align:center;padding:14px">No data yet</td></tr>';
+  if (!arr || !arr.length) return '<tr><td colspan="3" style="color:#475569;text-align:center;padding:14px">Sem dados ainda</td></tr>';
   return arr.map(r =>
     '<tr><td>' + keyFn(r) + '</td>' +
     '<td style="text-align:right;padding-right:12px;font-weight:600;color:#cbd5e1">' + valFn(r) + '</td>' +
@@ -14,7 +14,7 @@ function tableRows(arr, maxVal, keyFn, valFn, color) {
 }
 
 function dailyChart(daily) {
-  if (!daily || !daily.length) return '<div style="color:#475569;text-align:center;padding:32px 0;font-size:0.85rem">No data yet</div>';
+  if (!daily || !daily.length) return '<div style="color:#475569;text-align:center;padding:32px 0;font-size:0.85rem">Sem dados ainda</div>';
   const max = Math.max(...daily.map(d => d.c), 1);
   return daily.map(d => {
     const h = Math.max(4, Math.round((d.c / max) * 100));
@@ -27,7 +27,7 @@ function dailyChart(daily) {
 
 function deviceBars(devices) {
   const total = devices.reduce((s, d) => s + d.c, 0);
-  if (!total) return '<p style="color:#475569;text-align:center;padding:12px">No data</p>';
+  if (!total) return '<p style="color:#475569;text-align:center;padding:12px">Sem dados</p>';
   return devices.map(d => {
     const p = pct(d.c, total);
     const color = d.device === 'mobile' ? '#f59e0b' : '#3b82f6';
@@ -103,7 +103,7 @@ export async function onRequest({ request, env }) {
 <div style="max-width:960px;margin:0 auto">
   <div style="margin-bottom:28px">
     <h1 style="font-size:1.6rem;font-weight:800;color:#f8fafc;letter-spacing:-0.02em">Star Citizen Links &mdash; Analytics</h1>
-    <p style="font-size:0.78rem;color:#475569;margin-top:4px">Atualizado: ${new Date().toUTCString()}</p>
+    <p style="font-size:0.78rem;color:#475569;margin-top:4px">Atualizado: ${new Date().toLocaleString('pt-PT', { timeZone: 'UTC', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' UTC'}</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px">
     ${statCard('Hoje', todayRow?.c ?? 0)}
@@ -115,17 +115,17 @@ export async function onRequest({ request, env }) {
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
     ${section('Top Pa&#237;ses',
       '<table style="width:100%;border-collapse:collapse"><thead><tr>' +
-      '<th style="' + thStyle + '">Country</th>' +
-      '<th style="' + thStyle + ';text-align:right">Visits</th>' +
-      '<th style="' + thStyle + '">Bar</th></tr></thead><tbody>' +
+      '<th style="' + thStyle + '">Pa&#237;s</th>' +
+      '<th style="' + thStyle + ';text-align:right">Visitas</th>' +
+      '<th style="' + thStyle + '">Barra</th></tr></thead><tbody>' +
       tableRows(countries, maxC, r => flagImg(r.country) + r.country, r => r.c, 'linear-gradient(to right,#10b981,#34d399)') +
       '</tbody></table>'
     )}
     ${section('Links mais clicados',
       '<table style="width:100%;border-collapse:collapse"><thead><tr>' +
       '<th style="' + thStyle + '">Link</th>' +
-      '<th style="' + thStyle + ';text-align:right">Clicks</th>' +
-      '<th style="' + thStyle + '">Bar</th></tr></thead><tbody>' +
+      '<th style="' + thStyle + ';text-align:right">Cliques</th>' +
+      '<th style="' + thStyle + '">Barra</th></tr></thead><tbody>' +
       tableRows(links, maxL, r => r.mode, r => r.c, 'linear-gradient(to right,#3b82f6,#60a5fa)') +
       '</tbody></table>'
     )}
