@@ -31,7 +31,7 @@ function deviceBars(devices) {
   return devices.map(d => {
     const p = pct(d.c, total);
     const color = d.device === 'mobile' ? '#f59e0b' : '#3b82f6';
-    const label = d.device === 'mobile' ? '[Mobile]' : '[Desktop]';
+    const label = d.device === 'mobile' ? '&#128247;' : '&#128421;&#65039;';
     return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
       '<span style="font-size:0.8rem;color:#94a3b8;width:72px">' + label + '</span>' +
       '<div style="flex:1">' +
