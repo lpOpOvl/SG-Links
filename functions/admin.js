@@ -90,6 +90,7 @@ export async function onRequest({ request, env }) {
 
   const countries = countryRes?.results ?? [];
   countries.forEach(r => { if (r.country === 'PT') r.c = Math.round(r.c * 0.5 / 10) * 10; });
+  countries.sort((a, b) => b.c - a.c);
   const adjToday = (todayRow?.c??0) - Math.round((ptTodayRow?.c??0)/2);
   const adjWeek  = (weekRow?.c??0)  - Math.round((ptWeekRow?.c??0)/2);
   const adjMonth = (monthRow?.c??0) - Math.round((ptMonthRow?.c??0)/2);
