@@ -97,7 +97,6 @@ export async function onRequest({ request, env }) {
   const links     = linkRes?.results    ?? [];
   const linkScale = (totalRow?.c??0) > 0 ? adjTotal / (totalRow?.c??1) : 1;
   links.forEach(l => { l.c = Math.max(0, Math.round(l.c * linkScale)); });
-  const links     = linkRes?.results    ?? [];
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
   const maxC = Math.max(...countries.map(c => c.c), 1);
