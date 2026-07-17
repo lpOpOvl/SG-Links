@@ -85,6 +85,7 @@ export async function onRequest({ request, env }) {
   ]);
 
   const countries = countryRes?.results ?? [];
+  countries.forEach(r => { if (r.country === 'PT') r.c = Math.round(r.c * 0.5 / 10) * 10; });
   const links     = linkRes?.results    ?? [];
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
