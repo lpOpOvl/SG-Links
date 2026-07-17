@@ -82,10 +82,18 @@ export async function onRequest({ request, env }) {
     env.DB.prepare('SELECT country, COUNT(*) AS c FROM visits GROUP BY country ORDER BY c DESC LIMIT 12').all(),
     env.DB.prepare('SELECT device, COUNT(*) AS c FROM visits GROUP BY device ORDER BY c DESC').all(),
     env.DB.prepare("SELECT mode, COUNT(*) AS c FROM visits WHERE mode != 'home' GROUP BY mode ORDER BY c DESC LIMIT 12").all(),
+    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC, 'PT').first(),
+    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC - 6 * 86400, 'PT').first(),
+    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC - 29 * 86400, 'PT').first(),
+    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE country = ?').bind('PT').first(),
   ]);
 
   const countries = countryRes?.results ?? [];
   countries.forEach(r => { if (r.country === 'PT') r.c = Math.round(r.c * 0.5 / 10) * 10; });
+  const adjToday = (todayRow?.c??0) - Math.round((ptTodayRow?.c??0)/2);
+  const adjWeek  = (weekRow?.c??0)  - Math.round((ptWeekRow?.c??0)/2);
+  const adjMonth = (monthRow?.c??0) - Math.round((ptMonthRow?.c??0)/2);
+  const adjTotal = (totalRow?.c??0) - Math.round((ptTotalRow?.c??0)/2);
   const links     = linkRes?.results    ?? [];
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
