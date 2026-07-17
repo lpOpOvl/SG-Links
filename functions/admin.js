@@ -73,7 +73,7 @@ export async function onRequest({ request, env }) {
   const ago30 = now - 30 * 86400;
   const thStyle = 'font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;text-align:left;padding:6px 8px;border-bottom:1px solid #2d3248;font-weight:600';
 
-  const [todayRow, weekRow, monthRow, totalRow, dailyRes, countryRes, deviceRes, linkRes, ptTodayRow, ptWeekRow, ptMonthRow, ptTotalRow] = await Promise.all([
+  const [todayRow, weekRow, monthRow, totalRow, dailyRes, countryRes, deviceRes, linkRes] = await Promise.all([
     env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC).first(),
     env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 6 * 86400).first(),
     env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 29 * 86400).first(),
@@ -82,22 +82,14 @@ export async function onRequest({ request, env }) {
     env.DB.prepare('SELECT country, COUNT(*) AS c FROM visits GROUP BY country ORDER BY c DESC LIMIT 12').all(),
     env.DB.prepare('SELECT device, COUNT(*) AS c FROM visits GROUP BY device ORDER BY c DESC').all(),
     env.DB.prepare("SELECT mode, COUNT(*) AS c FROM visits WHERE mode != 'home' GROUP BY mode ORDER BY c DESC LIMIT 12").all(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC, 'PT').first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC - 6 * 86400, 'PT').first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ? AND country = ?').bind(todayUTC - 29 * 86400, 'PT').first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE country = ?').bind('PT').first(),
   ]);
 
   const countries = countryRes?.results ?? [];
-  countries.forEach(r => { if (r.country === 'PT') r.c = Math.round(r.c * 0.5 / 10) * 10; });
-  countries.sort((a, b) => b.c - a.c);
-  const adjToday = (todayRow?.c??0) - Math.round((ptTodayRow?.c??0)/2);
-  const adjWeek  = (weekRow?.c??0)  - Math.round((ptWeekRow?.c??0)/2);
-  const adjMonth = (monthRow?.c??0) - Math.round((ptMonthRow?.c??0)/2);
-  const adjTotal = (totalRow?.c??0) - Math.round((ptTotalRow?.c??0)/2);
+  const adjToday = todayRow?.c ?? 0;
+  const adjWeek  = weekRow?.c ?? 0;
+  const adjMonth = monthRow?.c ?? 0;
+  const adjTotal = totalRow?.c ?? 0;
   const links     = linkRes?.results    ?? [];
-  const linkScale = (totalRow?.c??0) > 0 ? adjTotal / (totalRow?.c??1) : 1;
-  links.forEach(l => { l.c = Math.max(0, Math.round(l.c * linkScale)); });
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
   const maxC = Math.max(...countries.map(c => c.c), 1);
