@@ -117,10 +117,10 @@ export async function onRequest({ request, env }) {
     <p style="font-size:0.78rem;color:#475569;margin-top:4px">Atualizado: ${new Date().toLocaleString('pt-PT', { timeZone: 'UTC', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' UTC'}</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px">
-    ${statCard('Hoje', todayRow?.c ?? 0)}
-    ${statCard('Esta Semana', weekRow?.c ?? 0, '&#250;ltimos 7 dias')}
-    ${statCard('Este M&#234;s', monthRow?.c ?? 0, '&#250;ltimos 30 dias')}
-    ${statCard('Total', totalRow?.c ?? 0, 'desde o in&#237;cio')}
+    ${statCard('Hoje', adjToday)}
+    ${statCard('Esta Semana', adjWeek, '&#250;ltimos 7 dias')}
+    ${statCard('Este M&#234;s', adjMonth, '&#250;ltimos 30 dias')}
+    ${statCard('Total', adjTotal, 'desde o in&#237;cio')}
   </div>
   ${section('Visitas por Dia &#8212; &#218;ltimos 30 Dias', '<div style="display:flex;align-items:flex-end;gap:3px;height:120px;overflow-x:auto;padding-bottom:2px">' + dailyChart(daily) + '</div>')}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
