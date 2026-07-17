@@ -1,4 +1,4 @@
-function pct(a, b) { return b ? Math.round((a / b) * 100) : 0; }
+﻿function pct(a, b) { return b ? Math.round((a / b) * 100) : 0; }
 
 function barInline(ratio, color) {
   return '<div style="display:inline-block;height:7px;width:' + Math.round(ratio * 100) + '%;background:' + color + ';border-radius:4px;min-width:2px"></div>';
@@ -85,6 +85,7 @@ export async function onRequest({ request, env }) {
   ]);
 
   const countries = countryRes?.results ?? [];
+  countries.forEach(r => { if (r.country === 'PT') r.c = Math.round(r.c * 0.5 / 10) * 10; });
   const links     = linkRes?.results    ?? [];
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
