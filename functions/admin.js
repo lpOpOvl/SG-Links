@@ -94,6 +94,8 @@ export async function onRequest({ request, env }) {
   const adjWeek  = (weekRow?.c??0)  - Math.round((ptWeekRow?.c??0)/2);
   const adjMonth = (monthRow?.c??0) - Math.round((ptMonthRow?.c??0)/2);
   const adjTotal = (totalRow?.c??0) - Math.round((ptTotalRow?.c??0)/2);
+  const modeScale = (totalRow?.c??0) > 0 ? adjTotal / (totalRow?.c??1) : 1;
+  modes.forEach(m => { m.c = Math.max(0, Math.round(m.c * modeScale)); });
   const links     = linkRes?.results    ?? [];
   const devices   = deviceRes?.results  ?? [];
   const daily     = dailyRes?.results   ?? [];
