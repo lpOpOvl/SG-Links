@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <!-- deploy test -->
 
@@ -1028,6 +1028,28 @@ document.documentElement.lang = 'pt';
 
 
 <script src="/analytics-snippet.js"></script>
+<script>
+(function(){
+  'use strict';
+  if(new URLSearchParams(location.search).get('owner')==='1'){
+    localStorage.setItem('_owner','1');
+    document.addEventListener('DOMContentLoaded',function(){
+      var d=document.createElement('div');
+      d.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#16a34a;color:#fff;padding:12px 24px;border-radius:8px;font-size:0.9rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.4)';
+      d.textContent='✓ Este browser não vai registar as tuas visitas.';
+      document.body.appendChild(d);setTimeout(function(){d.remove();},4000);
+    });
+  }
+  if(localStorage.getItem('_owner')) return;
+  var sid=sessionStorage.getItem('_sgl_sid');
+  if(!sid){sid=Math.random().toString(36).slice(2)+Date.now().toString(36);sessionStorage.setItem('_sgl_sid',sid);}
+  function getDevice(){return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'mobile':'desktop';}
+  function send(mode){fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:'/',mode:mode,device:getDevice(),session:sid}),keepalive:true}).catch(function(){});}
+  setTimeout(function(){
+    send('home');
+    document.querySelectorAll('a.card').forEach(function(card){card.addEventListener('click',function(){var titleEl=card.querySelector('.card-title');var mode=titleEl?titleEl.textContent.trim().slice(0,64):'link';send(mode);});});
+  },3000);
+}());
+</script>
 </body>
-
 </html>
