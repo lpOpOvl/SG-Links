@@ -42,20 +42,26 @@ export async function onRequestPost({ request, env }) {
   const ip      = request.headers.get('CF-Connecting-IP') || 'unknown';
   const country = (request.headers.get('CF-IPCountry') || 'XX').slice(0, 2).toUpperCase();
 
+  // Visit key: IP + 30-min bucket. One real visit keeps this same value
+  // no matter how many links the user clicks during that window.
   const bucket = Math.floor(Date.now() / 1000 / 1800);
-  const sessionHash = await sha256hex(`${ip}-${mode}-${bucket}`);
+  const sessionHash = await sha256hex(`${ip}-${bucket}`);
+
+  // Mode key: IP + mode + bucket, used only to dedup repeated clicks on
+  // the same link (not to identify the visit itself).
+  const modeHash = await sha256hex(`${ip}-${mode}-${bucket}`);
 
   const cutoff = Math.floor(Date.now() / 1000) - 1800;
   const dup = await env.DB.prepare(
-    'SELECT 1 FROM visits WHERE session = ? AND ts > ? LIMIT 1'
-  ).bind(sessionHash, cutoff).first();
+    'SELECT 1 FROM visits WHERE mode_hash = ? AND ts > ? LIMIT 1'
+  ).bind(modeHash, cutoff).first();
 
   if (dup) return new Response('{}', { status: 200, headers: CORS });
 
   const ts = Math.floor(Date.now() / 1000);
   await env.DB.prepare(
-    'INSERT INTO visits (ts, country, device, mode, session) VALUES (?, ?, ?, ?, ?)'
-  ).bind(ts, country, device, mode, sessionHash).run();
+    'INSERT INTO visits (ts, country, device, mode, session, mode_hash) VALUES (?, ?, ?, ?, ?, ?)'
+  ).bind(ts, country, device, mode, sessionHash, modeHash).run();
 
   return new Response('{}', { status: 200, headers: CORS });
 }

@@ -74,13 +74,13 @@ export async function onRequest({ request, env }) {
   const thStyle = 'font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;text-align:left;padding:6px 8px;border-bottom:1px solid #2d3248;font-weight:600';
 
   const [todayRow, weekRow, monthRow, totalRow, dailyRes, countryRes, deviceRes, linkRes] = await Promise.all([
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC).first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 6 * 86400).first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 29 * 86400).first(),
-    env.DB.prepare('SELECT COUNT(*) AS c FROM visits').first(),
-    env.DB.prepare("SELECT DATE(ts,'unixepoch') AS day, COUNT(*) AS c FROM visits WHERE ts >= ? GROUP BY day ORDER BY day ASC").bind(ago30).all(),
-    env.DB.prepare('SELECT country, COUNT(*) AS c FROM visits GROUP BY country ORDER BY c DESC LIMIT 12').all(),
-    env.DB.prepare('SELECT device, COUNT(*) AS c FROM visits GROUP BY device ORDER BY c DESC').all(),
+    env.DB.prepare('SELECT COUNT(DISTINCT session) AS c FROM visits WHERE ts >= ?').bind(todayUTC).first(),
+    env.DB.prepare('SELECT COUNT(DISTINCT session) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 6 * 86400).first(),
+    env.DB.prepare('SELECT COUNT(DISTINCT session) AS c FROM visits WHERE ts >= ?').bind(todayUTC - 29 * 86400).first(),
+    env.DB.prepare('SELECT COUNT(DISTINCT session) AS c FROM visits').first(),
+    env.DB.prepare("SELECT DATE(ts,'unixepoch') AS day, COUNT(DISTINCT session) AS c FROM visits WHERE ts >= ? GROUP BY day ORDER BY day ASC").bind(ago30).all(),
+    env.DB.prepare('SELECT country, COUNT(DISTINCT session) AS c FROM visits GROUP BY country ORDER BY c DESC LIMIT 12').all(),
+    env.DB.prepare('SELECT device, COUNT(DISTINCT session) AS c FROM visits GROUP BY device ORDER BY c DESC').all(),
     env.DB.prepare("SELECT mode, COUNT(*) AS c FROM visits WHERE mode != 'home' GROUP BY mode ORDER BY c DESC LIMIT 12").all(),
   ]);
 

@@ -2,6 +2,8 @@
 (function () {
   'use strict';
 
+  if (localStorage.getItem('_owner')) return;
+
   var sid = sessionStorage.getItem('_sgl_sid');
   if (!sid) {
     sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -13,6 +15,7 @@
   }
 
   function send(mode) {
+    if (localStorage.getItem('_owner')) return;
     fetch('/api/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
